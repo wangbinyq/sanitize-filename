@@ -1,6 +1,6 @@
 import * as path from "https://deno.land/std@0.146.0/path/mod.ts";
 import * as t from "https://deno.land/std@0.146.0/testing/asserts.ts";
-import { default as sanitize } from "./mod.ts";
+import { sanitize_bindings as sanitize } from "./mod.ts";
 
 function repeat(string: string, times: number): string {
   return new Array(times + 1).join(string);
