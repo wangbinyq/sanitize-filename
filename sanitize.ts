@@ -23,6 +23,8 @@
 
 // deno-lint-ignore-file no-control-regex
 
+import truncate from "https://esm.sh/truncate-utf8-bytes";
+
 const illegalRe = /[\/\?<>\\:\*\|"]/g;
 const controlRe = /[\x00-\x1f\x80-\x9f]/g;
 const reservedRe = /^\.+$/;
@@ -51,7 +53,7 @@ function _sanitize(input: string, replacement: SanitizeReplacement) {
     .replace(windowsReservedRe, replace)
     .replace(windowsTrailingRe, replace);
 
-  return sanitized;
+  return truncate(sanitized, 255);
 }
 
 export function sanitize(
