@@ -1,6 +1,6 @@
 import * as path from "https://deno.land/std@0.146.0/path/mod.ts";
 import * as t from "https://deno.land/std@0.146.0/testing/asserts.ts";
-import sanitize from "./mod.ts";
+import { default as sanitize } from "./mod.ts";
 
 function repeat(string: string, times: number): string {
   return new Array(times + 1).join(string);
@@ -187,12 +187,22 @@ async function testStringUsingFS(str: string) {
 
   try {
     await Deno.writeFile(filepath, textEncoder.encode("foobar"));
-    const data = await Deno.readFile(filepath);
-    t.assertEquals(textDecoder.decode(data), "foobar", "file contents equals");
-    await Deno.remove(filepath);
   } catch (err) {
     t.assertIsError(err, undefined, "write", "no error writing file");
+  }
+
+  let data;
+  try {
+    data = await Deno.readFile(filepath);
+  } catch (err) {
     t.assertIsError(err, undefined, "read", "no error reading file");
+  }
+
+  t.assertEquals(textDecoder.decode(data), "foobar", "file contents equals");
+
+  try {
+    await Deno.remove(filepath);
+  } catch (err) {
     t.assertIsError(err, undefined, "remove", "no error removing file");
   }
 }

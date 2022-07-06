@@ -1,4 +1,4 @@
-import sanitize from "./mod.ts";
+import { default as sanitize, sanitize_bindings } from "./mod.ts";
 
 function repeat(string: string, times: number): string {
   return new Array(times + 1).join(string);
@@ -56,6 +56,17 @@ const test_strings = [
   ...blns,
 ];
 
-Deno.bench(`sanitize`, () => {
+Deno.bench({
+  name: "ts",
+  group: "sanitize",
+  baseline: true,
+}, () => {
   test_strings.forEach((str) => sanitize(str));
+});
+
+Deno.bench({
+  name: "binding",
+  group: "sanitize",
+}, () => {
+  test_strings.forEach((str) => sanitize_bindings(str));
 });
